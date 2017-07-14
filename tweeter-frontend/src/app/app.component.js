@@ -11,11 +11,13 @@ import 'app/app.styles'
 import templateUrl from 'app/app.template'
 
 const controller = class TwtrAppController {
-  constructor ($log, loginService, $state) {
+  constructor ($log, loginService, $state, localStorageService) {
     'ngInject'
     this.loginService = loginService
     this.$state = $state
     $log.debug('twtr-app ...')
+    this.localStorageService = localStorageService
+    this.$log = $log
   }
 
   loggingOut () {
@@ -27,10 +29,27 @@ const controller = class TwtrAppController {
   currSearch = 'Tag'
   search () {
     let input = this.searchInput
-    if (this.searchType === '#') {
-      this.$state.go('tag', {label: input}, {reload: true})
-    } else if (this.searchType === '@') {
-      this.$state.go('profile', {username: input}, {reload: true})
+    if (input != null) {
+      if (this.searchType === '#') {
+        this.$state.go('tag', {label: input}, {reload: true})
+      } else if (this.searchType === '@') {
+        this.$state.go('profile', {username: input}, {reload: true})
+      }
+    }
+  }
+
+  // checks if a user is currently logged in
+  isLoggedOn () {
+    return this.localStorageService.get('currentUser') !== null
+  }
+
+  // move user to profile
+  goToProfile () {
+    if (this.isLoggedOn()) {
+      let currentUsername = this.localStorageService.get('currentUser').username
+      this.$state.go('profile', { username: currentUsername })
+    } else {
+      this.$state.go('profile')
     }
   }
 

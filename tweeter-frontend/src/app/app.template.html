@@ -12,6 +12,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-left">
       <li><a ui-sref="users" ui-sref-active="active">Users</a></li>
+      <li><a ui-sref="alltag" ui-sref-active="active">All Tags</a></li>
+      <li><a ui-sref-active="active" href ng-click="app.goToProfile()">Profile</a></li>
     </ul>
 
     <ul class="row nav navbar-nav navbar-right">
@@ -30,7 +32,8 @@
         </li>
       </form>
       <li><a class="btn col-xs-3" ui-sref-active="active" ng-click="app.search()">Search</a></li>
-      <li><a class="btn col-xs-3" ui-sref-active="active" ng-click="app.loggingOut()">Logout</a></li>
+      <li ng-if="app.isLoggedOn()"><a class="btn col-xs-3" ui-sref-active="active" ng-click="app.loggingOut()">Logout</a></li>
+      <li ng-if="!app.isLoggedOn()"><a class="btn col-xs-3" ui-sref-active="active" ui-sref="feed({ username: '' })">Login</a></li>
     </ul>
   </div>
   </div>
